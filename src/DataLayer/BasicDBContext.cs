@@ -3,11 +3,19 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BasicMVC.DataLayer
 {
-    public class BasicDBContext : DbContext
+    public class BasicDbContext : DbContext
     {
         public DbSet<Message> Messages { get; set; } = null!;
-        public BasicDBContext(DbContextOptions<BasicDBContext> options) : base(options)
+        public BasicDbContext(DbContextOptions<BasicDbContext> options) : base(options)
         {
+        }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Message>().HasData(
+                new Message {Id=1, MessageText = "Message One" },
+                new Message {Id=2, MessageText = "Message Two" }
+            );
         }
     }
 }
