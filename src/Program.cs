@@ -1,12 +1,27 @@
 using BasicMVC.DataLayer;
+using BasicMVC.Models.DomainModels;
+using BasicMVC.Models.IdentityModels;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddIdentity<MVCUser, IdentityRole>(options =>
+{
+    options.Password.RequiredLength = 10;
+    options.Password.RequireDigit = true;
+    options.Password.RequireNonAlphanumeric = true;
+})
+    .AddEntityFrameworkStores<AuthDbContext>()
+    .AddDefaultTokenProviders();
 
-builder.Services.AddDbContext<BasicDbContext>(options =>
+/*builder.Services.AddDbContext<BasicDbContext>(options =>
+                        options.UseSqlite(builder.Configuration
+                                            .GetConnectionString("BasicMVCContextString"))
+                    );*/
+builder.Services.AddDbContext<AuthDbContext>(options =>
                         options.UseSqlite(builder.Configuration
                                             .GetConnectionString("BasicMVCContextString"))
                     );
